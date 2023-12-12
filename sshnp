@@ -1,0 +1,18 @@
+#!/bin/bash 
+#owner by odity
+#./sshnp 'ls -l'
+#config /home/odity/.sshnp.conf
+R='\033[0;31m'
+C='\033[0;36m' 
+N='\033[0m' # No Color
+argc=$1
+IFS=$'\n'
+for i in $(cat ~/.sshnp.conf)
+do
+	ip=$(echo "$i"|awk -F ' ' '{print $1}')
+	user=$(echo "$i"|awk -F ' ' '{print $2}')
+	pass=$(echo "$i"|awk -F ' ' '{print $3}')
+	printf "Connect to ${R} $ip ${N} at ${C} $user ${N} with ${C} $pass ${N}\n"
+	bash -c "sshpass -p'$pass' ssh -o StrictHostKeyChecking=no $user@$ip -p22  '$argc' " 2>&1
+#done < "${1:-node.cfg}"
+done
